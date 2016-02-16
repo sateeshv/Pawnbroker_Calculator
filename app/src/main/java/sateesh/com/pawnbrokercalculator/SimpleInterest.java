@@ -3,11 +3,14 @@ package sateesh.com.pawnbrokercalculator;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -15,8 +18,14 @@ import java.util.ArrayList;
  */
 public class SimpleInterest extends Fragment {
 
-    TextView startDate, endDate, principal, interest, isMonthExclue, minDays;
-    String StartDateValue;
+    public TextView startDate, endDate, principal, interest, isMonthExclue, minDays;
+    TextView errorMessage, Diff, Diff1, Diff2, resultPrincipal, interestPerMonth, totalInterest, totalAmount, resultPrincipalValue;
+    String[] Month_Names = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
+    int Start_Date_Years, Start_Date_Months, Start_Date_Days, End_Date_Years, End_Date_Months, End_Date_Days;
+
+    Validations validations;
+    ArrayList<String> values;
+    ArrayList<Integer> dayValues;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -34,7 +43,7 @@ public class SimpleInterest extends Fragment {
 
 //        String StartDateValue = MonthWiseCalculations.getStartDate();
 
-        ArrayList<String> values = MonthWiseCalculations.getValues();
+        values = MonthWiseCalculations.getValues();
 
         View v = inflater.inflate(R.layout.simple_interest, container, false);
 
@@ -44,6 +53,14 @@ public class SimpleInterest extends Fragment {
         interest = (TextView) v.findViewById(R.id.interest_value);
         isMonthExclue = (TextView) v.findViewById(R.id.exclude_month_value);
         minDays = (TextView) v.findViewById(R.id.days_value);
+        Diff = (TextView) v.findViewById(R.id.si_diff);
+        Diff1 = (TextView) v.findViewById(R.id.si_diff1);
+        Diff2 = (TextView) v.findViewById(R.id.si_diff2);
+
+        resultPrincipalValue = (TextView) v.findViewById(R.id.si_result_Principal_Amount);
+        interestPerMonth = (TextView) v.findViewById(R.id.si_result_interest_month);
+        totalInterest = (TextView) v.findViewById(R.id.si_result_total_interest);
+        totalAmount = (TextView) v.findViewById(R.id.si_result_total_amount);
 
         startDate.setText(values.get(0).toString());
         endDate.setText(values.get(1).toString());
@@ -57,14 +74,104 @@ public class SimpleInterest extends Fragment {
         }
         String minDaysText = "More than " + values.get(5).toString() + " days considered as Month";
         minDays.setText(minDaysText);
+        validations = new Validations();
+        calculateDuration();
+        calculateInterest();
 
         return v;
     }
 
-//    public void getValues(String Date){
-//        StartDateValue = Date;
-//        Log.v("Sateesh ", "*** SimpleInterest StartDateValue is: " + StartDateValue);
-//
-//
-//    }
+    public void calculateDuration() {
+
+//        isExclude = (CheckBox) findViewById(R.id.IsExcludeMonth);
+        boolean isExcludeChecked = Boolean.getBoolean(values.get(4).toString());
+
+
+
+//        minDays = (EditText) findViewById(R.id.minDays);
+//        String days = minDays.getText().toString();
+        int daysCompleted = Integer.parseInt(values.get(5).toString());
+
+
+        dayValues = MonthWiseCalculations.getDayValues();
+
+        Start_Date_Years = dayValues.get(0).intValue();
+        Start_Date_Months = dayValues.get(1).intValue();
+        Start_Date_Days = dayValues.get(2).intValue();
+        End_Date_Years = dayValues.get(3).intValue();
+        End_Date_Months = dayValues.get(4).intValue();
+        End_Date_Days = dayValues.get(5).intValue();
+
+        Log.v("Sateesh", "*** Start Dates are " + Start_Date_Years+"-"+Start_Date_Months+"-" + Start_Date_Days);
+        Log.v("Sateesh", "*** End Dates are " + End_Date_Years+"-"+End_Date_Months+"-" + End_Date_Days);
+
+        if(dayValues != null) {
+            validations.extractYear(Start_Date_Years, End_Date_Years);
+            validations.extractMonth(Start_Date_Years, Start_Date_Months, Start_Date_Days, End_Date_Years, End_Date_Months, End_Date_Days);
+            validations.extractDay(Start_Date_Years, Start_Date_Months, Start_Date_Days, End_Date_Years, End_Date_Months, End_Date_Days);
+
+
+//            Diff = (TextView) getView().findViewById(R.id.si_diff);
+            Diff.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
+
+
+            validations.isDaysCrossed(daysCompleted);
+
+            Diff1.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
+
+
+            validations.isExcludeMonth(isExcludeChecked);
+
+//            Diff2 = (TextView) getView().findViewById(R.id.diff2);
+            if (validations.Months < 0) {
+                validations.Months = 0;
+                Diff2.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
+            } else {
+                Diff2.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
+            }
+        }else{
+            Log.v("Sateesh", "*** dayValues is NULL");
+        }
+
+    }
+
+    public void calculateInterest() {
+        int totalMonths = (validations.Years * 12) + validations.Months;
+//        prinicipalAmount = (EditText) findViewById(R.id.Principal_Amount);
+
+        String principalValueString = principal.getText().toString();
+
+        double prinicipalValue = Double.parseDouble(principalValueString);
+
+
+//        interestRate = (EditText) findViewById(R.id.interest);
+        double interestValue = Double.parseDouble(values.get(3).toString());
+
+
+        resultPrincipalValue.setText(principalValueString);
+
+
+
+        double interestPerMonthValue = (interestValue * prinicipalValue) / 100;
+        String formattedInterestPerMonthValue = formatDouble(interestPerMonthValue);
+        interestPerMonth.setText(formattedInterestPerMonthValue);
+
+
+        double totalInterestValue = interestPerMonthValue * totalMonths;
+        String formattedTotalInterestValue = formatDouble(totalInterestValue);
+        totalInterest.setText(formattedTotalInterestValue);
+
+
+        double totalAmountValue = totalInterestValue + prinicipalValue;
+        String formattedTotalAmountValue = formatDouble(totalAmountValue);
+        totalAmount.setText(formattedTotalAmountValue);
+
+
+    }
+
+    public static String formatDouble(double value) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        return df.format(value);
+    }
 }

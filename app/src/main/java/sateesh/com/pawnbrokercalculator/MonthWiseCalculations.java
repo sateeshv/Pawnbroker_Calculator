@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +33,7 @@ public class MonthWiseCalculations extends AppCompatActivity {
     private ViewPager mViewPager;
 
     public static ArrayList<String> values;
+    public static ArrayList<Integer> dayValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +41,9 @@ public class MonthWiseCalculations extends AppCompatActivity {
         setContentView(R.layout.activity_month_wise_calculations);
 
         Bundle b = getIntent().getExtras();
-        String StartDate = b.getString("Start");
         values = b.getStringArrayList("values");
-        Log.v("Sateesh" , "*** StartDate inb Calculations" + StartDate);
+        dayValues = b.getIntegerArrayList("dayValues");
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -163,5 +163,9 @@ public class MonthWiseCalculations extends AppCompatActivity {
 
     public static ArrayList<String> getValues(){
         return values;
+    }
+
+    public static ArrayList<Integer> getDayValues(){
+        return dayValues;
     }
 }

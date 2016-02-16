@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -40,17 +39,22 @@ public class MonthWiseDetail extends AppCompatActivity {
         validations = new Validations();
         displayErrorMessage();
         if ((errorMessage.getText().toString()).matches("")) {
-            calculateDuration();
-            calculateInterest();
+//            calculateDuration();
+//            calculateInterest();
+
+            prinicipalAmount = (EditText) findViewById(R.id.Principal_Amount);
+            interestRate = (EditText) findViewById(R.id.interest);
+            isExclude = (CheckBox) findViewById(R.id.IsExcludeMonth);
+            minDays = (EditText) findViewById(R.id.minDays);
+
+
             String startDateValue = startDate.getText().toString();
             String endDateValue = endDate.getText().toString();
             String principalValue = prinicipalAmount.getText().toString();
-            String interestValue = interestPerMonth.getText().toString();
+            String interestValue = interestRate.getText().toString();
             String isExcludeCheckedValue = String.valueOf(isExclude.isChecked());
             String minDaysValue = minDays.getText().toString();
 
-
-            Log.v("Sateesh ", "*** StartDateValue in MonthwiseDetail Calculate method: " + startDateValue);
             ArrayList<String> dataValues = new ArrayList<String>();
             dataValues.add(startDateValue);
             dataValues.add(endDateValue);
@@ -59,12 +63,19 @@ public class MonthWiseDetail extends AppCompatActivity {
             dataValues.add(isExcludeCheckedValue);
             dataValues.add(minDaysValue);
 
+            ArrayList<Integer> dayValues = new ArrayList<Integer>();
+            dayValues.add(Start_Date_Years);
+            dayValues.add(Start_Date_Months);
+            dayValues.add(Start_Date_Days);
+            dayValues.add(End_Date_Years);
+            dayValues.add(End_Date_Months);
+            dayValues.add(End_Date_Days);
+
+
             Intent calculations = new Intent(this, MonthWiseCalculations.class);
             Bundle b = new Bundle();
-            b.putString("StartDate", startDateValue);
-            b.putString("EndDate", endDate.getText().toString());
             b.putStringArrayList("values", dataValues);
-
+            b.putIntegerArrayList("dayValues", dayValues);
 
             calculations.putExtras(b);
             startActivity(calculations);
@@ -189,15 +200,6 @@ public class MonthWiseDetail extends AppCompatActivity {
         DialogFragment newFragment = new StartDate_DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
-
-//    @Override
-//    public void respond(String data) {
-//        Log.v("Sateesh ", "Respond Method value of Data is : " + data);
-//        FragmentManager manager = getSupportFragmentManager();
-//        Log.v("Sateesh ", "*** In MonthWise Detail Activity respond Method");
-//        SimpleInterest simpleInterest = (SimpleInterest) manager.findFragmentById(R.id.simple_interest);
-//        simpleInterest.getValues(data);
-//    }
 
 
     public class StartDate_DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
