@@ -81,20 +81,20 @@ public class MonthWiseDetail extends AppCompatActivity {
             startActivity(calculations);
 
         } else {
-            resetValues();
+//            resetValues();
         }
 
 
     }
 
-    public void resetValues() {
-        Diff = (TextView) findViewById(R.id.diff);
-        Diff.setText("");
-        Diff1 = (TextView) findViewById(R.id.diff1);
-        Diff1.setText("");
-        Diff2 = (TextView) findViewById(R.id.diff2);
-        Diff2.setText("");
-    }
+//    public void resetValues() {
+//        Diff = (TextView) findViewById(R.id.diff);
+//        Diff.setText("");
+//        Diff1 = (TextView) findViewById(R.id.diff1);
+//        Diff1.setText("");
+//        Diff2 = (TextView) findViewById(R.id.diff2);
+//        Diff2.setText("");
+//    }
 
     public void displayErrorMessage() {
 
@@ -110,11 +110,11 @@ public class MonthWiseDetail extends AppCompatActivity {
         if ((isEndDateEmpty.matches("")) || (isStartDateEmpty.matches(""))) {
             errorMessage.setVisibility(View.VISIBLE);
             errorMessage.setText("Please choose Date(s)");
-            resetValues();
+//            resetValues();
         } else if (message != null) {
             errorMessage.setVisibility(View.VISIBLE);
             errorMessage.setText(message);
-            resetValues();
+//            resetValues();
         } else {
             errorMessage.setText("");
             errorMessage.setVisibility(View.GONE);

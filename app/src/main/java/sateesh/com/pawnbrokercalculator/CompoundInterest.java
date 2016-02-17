@@ -47,7 +47,6 @@ public class CompoundInterest extends Fragment {
         dayValues = MonthWiseCalculations.getDayValues();
 
         startDate = (TextView) v.findViewById(R.id.ci_startDate_value);
-        endDate = (TextView) v.findViewById(R.id.ci_endtDate_value);
         principal = (TextView) v.findViewById(R.id.ci_principal_value);
         interest = (TextView) v.findViewById(R.id.ci_interest_value);
         isMonthExclude = (TextView) v.findViewById(R.id.ci_exclude_month_value);
@@ -62,8 +61,8 @@ public class CompoundInterest extends Fragment {
         totalAmount = (TextView) v.findViewById(R.id.ci_result_total_amount);
 
         if (values != null && dayValues != null) {
-            startDate.setText(values.get(0).toString());
-            endDate.setText(values.get(1).toString());
+            String Duration = values.get(0).toString() + " / " + values.get(1).toString();
+            startDate.setText(Duration);
             principal.setText(values.get(2).toString());
             interest.setText(values.get(3).toString());
 
@@ -114,13 +113,13 @@ public class CompoundInterest extends Fragment {
         validations.extractDay(Start_Date_Years, Start_Date_Months, Start_Date_Days, End_Date_Years, End_Date_Months, End_Date_Days);
 
 //        Diff = (TextView) findViewById(R.id.diff);
-        Diff.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
+        Diff.setText(validations.Years + " Years " + (validations.Months) + " Months " + validations.Days + " Days ");
 
 
         validations.isDaysCrossed(minDays_Number);
 
 //        Diff1 = (TextView) findViewById(R.id.diff1);
-        Diff1.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
+        Diff1.setText(validations.Years + " Years " + (validations.Months) + " Months " + validations.Days + " Days ");
 
 
         validations.isExcludeMonth(MonthValue_boolean);
@@ -128,9 +127,9 @@ public class CompoundInterest extends Fragment {
 //        Diff2 = (TextView) findViewById(R.id.diff2);
         if (validations.Months < 0) {
             validations.Months = 0;
-            Diff2.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
+            Diff2.setText(validations.Years + " Years " + (validations.Months) + " Months " + validations.Days + " Days ");
         } else {
-            Diff2.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
+            Diff2.setText(validations.Years + " Years " + (validations.Months) + " Months " + validations.Days + " Days ");
         }
 
     }
