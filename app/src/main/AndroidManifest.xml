@@ -9,13 +9,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".MonthWiseDetail" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".MonthWiseDetail" />
+            </activity>
         <activity
             android:name=".MonthWiseCalculations"
             android:label="@string/title_activity_month_wise_calculations"

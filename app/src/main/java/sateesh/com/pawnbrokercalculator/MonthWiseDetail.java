@@ -100,18 +100,31 @@ public class MonthWiseDetail extends AppCompatActivity {
 
 
         startDate = (EditText) findViewById(R.id.startDate_EditText);
-        String isStartDateEmpty = startDate.getText().toString();
-
         endDate = (EditText) findViewById(R.id.endDate_EditText);
-        String isEndDateEmpty = endDate.getText().toString();
+        prinicipalAmount = (EditText) findViewById(R.id.Principal_Amount);
+        interestRate = (EditText) findViewById(R.id.interest);
+        minDays = (EditText) findViewById(R.id.minDays);
         errorMessage = (TextView) findViewById(R.id.ErrorMessage);
+
+        String isStartDateEmpty = startDate.getText().toString();
+        String isEndDateEmpty = endDate.getText().toString();
+        String isPrincipalEmpty = prinicipalAmount.getText().toString();
+        String isInterestEmpty = interestRate.getText().toString();
+
 
         String message = validations.errorMessages(Start_Date_Years, Start_Date_Months, Start_Date_Days, End_Date_Years, End_Date_Months, End_Date_Days);
         if ((isEndDateEmpty.matches("")) || (isStartDateEmpty.matches(""))) {
             errorMessage.setVisibility(View.VISIBLE);
             errorMessage.setText("Please choose Date(s)");
 //            resetValues();
-        } else if (message != null) {
+        }else if(isPrincipalEmpty.matches("")){
+            errorMessage.setVisibility(View.VISIBLE);
+            errorMessage.setText("Please enter Principal Amount");
+        }else if(isInterestEmpty.matches("")){
+            errorMessage.setVisibility(View.VISIBLE);
+            errorMessage.setText("Please enter Interest Value");
+        }
+        else if (message != null) {
             errorMessage.setVisibility(View.VISIBLE);
             errorMessage.setText(message);
 //            resetValues();
