@@ -26,6 +26,8 @@ public class MonthWiseDetail extends AppCompatActivity {
     Validations validations;
     CheckBox isExclude;
 
+    String returnStartDate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +37,11 @@ public class MonthWiseDetail extends AppCompatActivity {
     }
 
 
+
     public void Calculate(View v) {
         validations = new Validations();
         displayErrorMessage();
         if ((errorMessage.getText().toString()).matches("")) {
-//            calculateDuration();
-//            calculateInterest();
-
             prinicipalAmount = (EditText) findViewById(R.id.Principal_Amount);
             interestRate = (EditText) findViewById(R.id.interest);
             isExclude = (CheckBox) findViewById(R.id.IsExcludeMonth);
@@ -119,74 +119,6 @@ public class MonthWiseDetail extends AppCompatActivity {
             errorMessage.setText("");
             errorMessage.setVisibility(View.GONE);
         }
-
-    }
-
-    public void calculateDuration() {
-
-        isExclude = (CheckBox) findViewById(R.id.IsExcludeMonth);
-        boolean isExcludeChecked = isExclude.isChecked();
-
-        minDays = (EditText) findViewById(R.id.minDays);
-        String days = minDays.getText().toString();
-        int daysCompleted = Integer.parseInt(days);
-
-        validations.extractYear(Start_Date_Years, End_Date_Years);
-        validations.extractMonth(Start_Date_Years, Start_Date_Months, Start_Date_Days, End_Date_Years, End_Date_Months, End_Date_Days);
-        validations.extractDay(Start_Date_Years, Start_Date_Months, Start_Date_Days, End_Date_Years, End_Date_Months, End_Date_Days);
-
-        Diff = (TextView) findViewById(R.id.diff);
-        Diff.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
-
-
-        validations.isDaysCrossed(daysCompleted);
-
-        Diff1 = (TextView) findViewById(R.id.diff1);
-        Diff1.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
-
-
-        validations.isExcludeMonth(isExcludeChecked);
-
-        Diff2 = (TextView) findViewById(R.id.diff2);
-        if (validations.Months < 0) {
-            validations.Months = 0;
-            Diff2.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
-        } else {
-            Diff2.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
-        }
-
-    }
-
-    public void calculateInterest() {
-        int totalMonths = (validations.Years * 12) + validations.Months;
-        prinicipalAmount = (EditText) findViewById(R.id.Principal_Amount);
-
-        String principalValueString = prinicipalAmount.getText().toString();
-
-        double prinicipalValue = Double.parseDouble(principalValueString);
-
-
-        interestRate = (EditText) findViewById(R.id.interest);
-        double interestValue = Double.parseDouble(interestRate.getText().toString());
-
-        TextView resultPrincipalValue = (TextView) findViewById(R.id.result_Principal_Amount);
-        resultPrincipalValue.setText(principalValueString);
-
-        interestPerMonth = (TextView) findViewById(R.id.result_interest_month);
-        double interestPerMonthValue = (interestValue * prinicipalValue) / 100;
-        String formattedInterestPerMonthValue = formatDouble(interestPerMonthValue);
-        interestPerMonth.setText(formattedInterestPerMonthValue);
-
-        totalInterest = (TextView) findViewById(R.id.result_total_interest);
-        double totalInterestValue = interestPerMonthValue * totalMonths;
-        String formattedTotalInterestValue = formatDouble(totalInterestValue);
-        totalInterest.setText(formattedTotalInterestValue);
-
-        totalAmount = (TextView) findViewById(R.id.result_total_amount);
-        double totalAmountValue = totalInterestValue + prinicipalValue;
-        String formattedTotalAmountValue = formatDouble(totalAmountValue);
-        totalAmount.setText(formattedTotalAmountValue);
-
 
     }
 

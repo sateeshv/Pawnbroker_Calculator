@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:background="#F2F2F2"
     android:orientation="vertical"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context="sateesh.com.pawnbrokercalculator.MonthWiseDetail">
     <ScrollView
         android:layout_width="match_parent"
@@ -107,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="number"
-                android:text="100" />
+                />
         </LinearLayout>
 
 
@@ -131,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="number"
-                android:text="2" />
+                />
         </LinearLayout>
 
         <TextView

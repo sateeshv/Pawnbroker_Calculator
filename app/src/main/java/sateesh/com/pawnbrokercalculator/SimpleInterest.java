@@ -18,14 +18,17 @@ import java.util.ArrayList;
  */
 public class SimpleInterest extends Fragment {
 
-    public TextView startDate, endDate, principal, interest, isMonthExclue, minDays;
+    public TextView startDate, endDate, principal, interest, isMonthExclude, minDays;
     TextView errorMessage, Diff, Diff1, Diff2, resultPrincipal, interestPerMonth, totalInterest, totalAmount, resultPrincipalValue;
     String[] Month_Names = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
     int Start_Date_Years, Start_Date_Months, Start_Date_Days, End_Date_Years, End_Date_Months, End_Date_Days;
+    boolean MonthValue_boolean;
+    int minDays_Number;
 
     Validations validations;
     ArrayList<String> values;
     ArrayList<Integer> dayValues;
+
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -43,16 +46,18 @@ public class SimpleInterest extends Fragment {
 
 //        String StartDateValue = MonthWiseCalculations.getStartDate();
 
-        values = MonthWiseCalculations.getValues();
+
 
         View v = inflater.inflate(R.layout.simple_interest, container, false);
+        values = MonthWiseCalculations.getValues();
+        dayValues = MonthWiseCalculations.getDayValues();
 
-        startDate = (TextView) v.findViewById(R.id.startDate_value);
-        endDate = (TextView) v.findViewById(R.id.endtDate_value);
-        principal = (TextView) v.findViewById(R.id.principal_value);
-        interest = (TextView) v.findViewById(R.id.interest_value);
-        isMonthExclue = (TextView) v.findViewById(R.id.exclude_month_value);
-        minDays = (TextView) v.findViewById(R.id.days_value);
+        startDate = (TextView) v.findViewById(R.id.si_startDate_value);
+        endDate = (TextView) v.findViewById(R.id.si_endtDate_value);
+        principal = (TextView) v.findViewById(R.id.si_principal_value);
+        interest = (TextView) v.findViewById(R.id.si_interest_value);
+        isMonthExclude = (TextView) v.findViewById(R.id.si_exclude_month_value);
+        minDays = (TextView) v.findViewById(R.id.si_days_value);
         Diff = (TextView) v.findViewById(R.id.si_diff);
         Diff1 = (TextView) v.findViewById(R.id.si_diff1);
         Diff2 = (TextView) v.findViewById(R.id.si_diff2);
@@ -62,50 +67,58 @@ public class SimpleInterest extends Fragment {
         totalInterest = (TextView) v.findViewById(R.id.si_result_total_interest);
         totalAmount = (TextView) v.findViewById(R.id.si_result_total_amount);
 
-        startDate.setText(values.get(0).toString());
-        endDate.setText(values.get(1).toString());
-        principal.setText(values.get(2).toString());
-        interest.setText(values.get(3).toString());
+        if (values != null) {
+            startDate.setText(values.get(0).toString());
+            endDate.setText(values.get(1).toString());
+            principal.setText(values.get(2).toString());
+            interest.setText(values.get(3).toString());
 
-        if ((values.get(4).toString()).equals("true")) {
-            isMonthExclue.setText("Excluded");
-        } else {
-            isMonthExclue.setText("included");
+            MonthValue_boolean = Boolean.parseBoolean(values.get(4).toString());
+
+            Log.v("Sateesh ", "*** MonthExclude status in Values : " + MonthValue_boolean);
+            if ((values.get(4).toString()).equals("true")) {
+                isMonthExclude.setText("Excluded");
+            } else {
+                isMonthExclude.setText("included");
+            }
+            minDays_Number = Integer.parseInt(values.get(5).toString());
+            String minDaysText = "More than " + minDays_Number + " days considered as Month";
+            minDays.setText(minDaysText);
         }
-        String minDaysText = "More than " + values.get(5).toString() + " days considered as Month";
-        minDays.setText(minDaysText);
         validations = new Validations();
-        calculateDuration();
-        calculateInterest();
-
+        if(values != null && dayValues != null) {
+            si_calculateDuration();
+            si_calculateInterest();
+        }
         return v;
     }
 
-    public void calculateDuration() {
+    public void si_calculateDuration() {
 
 //        isExclude = (CheckBox) findViewById(R.id.IsExcludeMonth);
-        boolean isExcludeChecked = Boolean.getBoolean(values.get(4).toString());
-
+        if (values != null && dayValues != null) {
+//            boolean isExcludeChecked = Boolean.getBoolean(values.get(4).toString());
+//            Log.v("Sateesh ", "*** MonthExclude status: " + MonthValue_boolean);
 
 
 //        minDays = (EditText) findViewById(R.id.minDays);
 //        String days = minDays.getText().toString();
-        int daysCompleted = Integer.parseInt(values.get(5).toString());
+//            int daysCompleted = Integer.parseInt(values.get(5).toString());
 
 
-        dayValues = MonthWiseCalculations.getDayValues();
 
-        Start_Date_Years = dayValues.get(0).intValue();
-        Start_Date_Months = dayValues.get(1).intValue();
-        Start_Date_Days = dayValues.get(2).intValue();
-        End_Date_Years = dayValues.get(3).intValue();
-        End_Date_Months = dayValues.get(4).intValue();
-        End_Date_Days = dayValues.get(5).intValue();
 
-        Log.v("Sateesh", "*** Start Dates are " + Start_Date_Years+"-"+Start_Date_Months+"-" + Start_Date_Days);
-        Log.v("Sateesh", "*** End Dates are " + End_Date_Years+"-"+End_Date_Months+"-" + End_Date_Days);
+            Start_Date_Years = dayValues.get(0).intValue();
+            Start_Date_Months = dayValues.get(1).intValue();
+            Start_Date_Days = dayValues.get(2).intValue();
+            End_Date_Years = dayValues.get(3).intValue();
+            End_Date_Months = dayValues.get(4).intValue();
+            End_Date_Days = dayValues.get(5).intValue();
 
-        if(dayValues != null) {
+            Log.v("Sateesh", "*** Start Dates are " + Start_Date_Years + "-" + Start_Date_Months + "-" + Start_Date_Days);
+            Log.v("Sateesh", "*** End Dates are " + End_Date_Years + "-" + End_Date_Months + "-" + End_Date_Days);
+
+
             validations.extractYear(Start_Date_Years, End_Date_Years);
             validations.extractMonth(Start_Date_Years, Start_Date_Months, Start_Date_Days, End_Date_Years, End_Date_Months, End_Date_Days);
             validations.extractDay(Start_Date_Years, Start_Date_Months, Start_Date_Days, End_Date_Years, End_Date_Months, End_Date_Days);
@@ -115,12 +128,12 @@ public class SimpleInterest extends Fragment {
             Diff.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
 
 
-            validations.isDaysCrossed(daysCompleted);
+            validations.isDaysCrossed(minDays_Number);
 
             Diff1.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
 
 
-            validations.isExcludeMonth(isExcludeChecked);
+            validations.isExcludeMonth(MonthValue_boolean);
 
 //            Diff2 = (TextView) getView().findViewById(R.id.diff2);
             if (validations.Months < 0) {
@@ -129,14 +142,15 @@ public class SimpleInterest extends Fragment {
             } else {
                 Diff2.setText(validations.Years + " Y " + (validations.Months) + " M " + validations.Days + " D ");
             }
-        }else{
+        } else {
             Log.v("Sateesh", "*** dayValues is NULL");
         }
 
     }
 
-    public void calculateInterest() {
-        int totalMonths = (validations.Years * 12) + validations.Months;
+    public void si_calculateInterest() {
+
+        double totalMonths = (validations.Years * 12) + validations.Months;
 //        prinicipalAmount = (EditText) findViewById(R.id.Principal_Amount);
 
         String principalValueString = principal.getText().toString();
@@ -149,7 +163,6 @@ public class SimpleInterest extends Fragment {
 
 
         resultPrincipalValue.setText(principalValueString);
-
 
 
         double interestPerMonthValue = (interestValue * prinicipalValue) / 100;

@@ -1,17 +1,17 @@
 package sateesh.com.pawnbrokercalculator;
 
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -40,10 +40,6 @@ public class MonthWiseCalculations extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_month_wise_calculations);
 
-        Bundle b = getIntent().getExtras();
-        values = b.getStringArrayList("values");
-        dayValues = b.getIntegerArrayList("dayValues");
-
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -56,8 +52,19 @@ public class MonthWiseCalculations extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabbar);
         tabLayout.setupWithViewPager(mViewPager);
 
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            values = b.getStringArrayList("values");
+            dayValues = b.getIntegerArrayList("dayValues");
+        }
 
-            }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
 
     @Override
@@ -75,49 +82,26 @@ public class MonthWiseCalculations extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case android.R.id.home:
+                Intent upIntent = new Intent(this, MainActivity.class);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    NavUtils.navigateUpTo(this, upIntent);
+                    finish();
+                } else {
+                    finish();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
+
     }
 
-
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_month_wise_calculations, container, false);
-            //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -133,7 +117,7 @@ public class MonthWiseCalculations extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            switch(position) {
+            switch (position) {
                 case 0:
                     return SimpleInterest.newInstance(position + 1);
                 case 1:
@@ -155,17 +139,16 @@ public class MonthWiseCalculations extends AppCompatActivity {
                     return "Simple";
                 case 1:
                     return "Compound";
-
             }
             return null;
         }
     }
 
-    public static ArrayList<String> getValues(){
+    public static ArrayList<String> getValues() {
         return values;
     }
 
-    public static ArrayList<Integer> getDayValues(){
+    public static ArrayList<Integer> getDayValues() {
         return dayValues;
     }
 }

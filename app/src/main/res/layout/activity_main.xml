@@ -22,4 +22,9 @@
         android:layout_height="50dp"
         android:id="@+id/day_wise"
         android:text="Day Wise"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/dummy_calc_wise"
+        android:text="Dummy Calc Wise"/>
 </LinearLayout>

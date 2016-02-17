@@ -20,6 +20,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         day_wise_btn = (Button) findViewById(R.id.day_wise);
         day_wise_btn.setOnClickListener(this);
+
+        Button dummy_btn = (Button) findViewById(R.id.dummy_calc_wise);
+        dummy_btn.setOnClickListener(this);
     }
 
     @Override
@@ -31,6 +34,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.day_wise:
+                break;
+
+            case R.id.dummy_calc_wise:
+                Intent monthWiseDetail_calc = new Intent(MainActivity.this, MonthWiseCalculations.class);
+                startActivity(monthWiseDetail_calc);
                 break;
         }
     }
